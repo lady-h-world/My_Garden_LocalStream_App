@@ -8,7 +8,7 @@ with st.sidebar:
     st.session_state.openai_api_key = st.text_input("Enter OpenAI API Key", key="chatbot_api_key", type="password")
     "[How to get OpenAI API key](https://platform.openai.com/account/api-keys)"
 
-    st.write(f'{TEST_CODE}')
+    st.write(st.secrets['TEST_CODE'])  # TEST ONLY
 
 st.title("💖 Where do you plan to travel to?")
 st.markdown('#')
