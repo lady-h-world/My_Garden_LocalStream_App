@@ -27,7 +27,7 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
     st.markdown(confirm_response, unsafe_allow_html=True)
 
     openai_client = OpenAI(api_key=st.secrets['OPENAI_API_KEY'])
-    apify_client = ApifyClient(st.secrets['APIFY_CLIENT'])
+    apify_client = ApifyClient(st.secrets['APIFY_TOKEN'])
 
     start_time = time.time()
 
