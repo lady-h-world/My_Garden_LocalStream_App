@@ -5,10 +5,7 @@ st.set_page_config(page_title="explore_local_traveling")
 with st.sidebar:
     st.image('logo.png', width=200)
     st.markdown('#')
-    st.session_state.openai_api_key = st.text_input("Enter OpenAI API Key", key="chatbot_api_key", type="password")
-    "[How to get OpenAI API key](https://platform.openai.com/account/api-keys)"
 
-    st.write(st.secrets['TEST_CODE'])  # TEST ONLY
 
 st.title("💖 Where do you plan to travel to?")
 st.markdown('#')
@@ -106,11 +103,7 @@ if country_input != '____' or region_input not in ['____', ''] or month_input !=
        (st.session_state.show_region == 'Yes' and country_input != '____' and month_input != '____' and region_input not in ['____', '']):
         with col3:
             st.markdown('#')
-            if not st.session_state.openai_api_key:
-                guidance = '👈 Enter OpenAI API Key, then click <b>CONFIRM</b>'
-                st.markdown(guidance, unsafe_allow_html=True)
-            else:
-                if st.button('CONFIRM'):
-                    switch_page('results')
+            if st.button('CONFIRM'):
+                switch_page('results')
 
 
