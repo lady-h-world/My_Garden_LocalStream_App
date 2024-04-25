@@ -18,7 +18,6 @@ with st.sidebar:
 
 TIMEOUT_SECONDS = 180  # Timeout after 180 sec
 MAX_QUERY_CT = 2
-OUTPUT_LIMIT = 5  # In order to save momney, I decided to add this limit :)
 
 if 'country' in st.session_state.keys() and st.session_state.country != '' and \
        'month' in st.session_state.keys() and st.session_state.month != '':
@@ -53,11 +52,7 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
     if len(suggestion_lst) > 0:
         st.write('##')
         with st.spinner('🚀 Collecting local activities! Look 👇'):
-            output_ct = 0
             for suggestion in suggestion_lst:
-                if output_ct == OUTPUT_LIMIT:
-                    st.stop() 
-                
                 elapsed_time = time.time() - start_time
                 if elapsed_time > TIMEOUT_SECONDS:
                     st.stop()  # stop when timeout
@@ -83,6 +78,5 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
                     cols = st.columns(num_cols)
                     for col, url in zip(cols, image_lst):
                         col.image(url, use_column_width='auto')
-                output_ct += 1
 
     st.stop()
