@@ -16,7 +16,7 @@ st.set_page_config(page_title="local_suggestions")
 with st.sidebar:
     st.image('logo.png', width=200)
 
-TIMEOUT_SECONDS = 180  # Timeout after 180 sec
+TIMEOUT_SECONDS = 120  # Timeout after 120 sec
 MAX_QUERY_CT = 2
 
 if 'country' in st.session_state.keys() and st.session_state.country != '' and \
@@ -65,7 +65,7 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
                 image_lst = []
                 for item in apify_client.dataset(run["defaultDatasetId"]).iterate_items():
                     try:
-                        response = requests.get(item['imageUrl'], timeout=3)
+                        response = requests.get(item['imageUrl'], timeout=2)
                         if response.status_code == 200:
                             image_lst.append(Image.open(BytesIO(response.content)))
                     except:
