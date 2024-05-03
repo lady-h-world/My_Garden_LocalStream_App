@@ -110,7 +110,6 @@ def search_images(query, api_key, cx, hq):
         "lr": "lang_en",
         "imgColorType": "color",
         "hq": hq
-
     }
     response = requests.get(url, params=params)
     if response.status_code == 200:
