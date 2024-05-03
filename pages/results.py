@@ -50,33 +50,51 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
                 st.write("🤔 Can't show anything on the map, does it exist on Earth?")
 
     if len(suggestion_lst) > 0:
+        query_lst = []
+        extra_query_str = f'{st.session_state.region} {st.session_state.country} in {st.session_state.month}'
+        for suggestion in suggestion_lst:
+            query_lst.append(f'{suggestion} {extra_query_str}')
+
         st.write('##')
         with st.spinner('🚀 Collecting local activities! Look 👇'):
-            for suggestion in suggestion_lst:
-                elapsed_time = time.time() - start_time
-                if elapsed_time > TIMEOUT_SECONDS:
-                    st.stop()  # stop when timeout
+            elapsed_time = time.time() - start_time
+            if elapsed_time > TIMEOUT_SECONDS:
+                st.stop()  # stop when timeout
 
-                run_input = {
-                    "queries": [f'{suggestion} {st.session_state.region} {st.session_state.country} in {st.session_state.month}'],
-                    "maxResultsPerQuery": MAX_QUERY_CT,
-                }
-                run = apify_client.actor("tnudF2IxzORPhg4r8").call(run_input=run_input)
-                image_lst = []
-                for item in apify_client.dataset(run["defaultDatasetId"]).iterate_items():
-                    try:
-                        response = requests.get(item['imageUrl'], timeout=2)
-                        if response.status_code == 200:
-                            image_lst.append(Image.open(BytesIO(response.content)))
-                    except:
-                        pass
-                if len(image_lst) > 0:
-                    st.write(suggestion)
-                    max_images_per_row = MAX_QUERY_CT
-                    num_cols = min(max_images_per_row, len(image_lst))
+            run_input = {
+                "queries": query_lst,
+                "maxResultsPerQuery": MAX_QUERY_CT,
+            }
+            run = apify_client.actor("tnudF2IxzORPhg4r8").call(run_input=run_input)
+            pre_query = None
+            image_lst = []
+            for item in apify_client.dataset(run["defaultDatasetId"]).iterate_items():
+                cur_query = item['query']
+                if cur_query != pre_query:
+                    if len(image_lst) > 0:
+                        st.write(pre_query.replace(extra_query_str, ''))
+                        max_images_per_row = MAX_QUERY_CT
+                        num_cols = min(max_images_per_row, len(image_lst))
 
-                    cols = st.columns(num_cols)
-                    for col, url in zip(cols, image_lst):
-                        col.image(url, use_column_width='auto')
+                        cols = st.columns(num_cols)
+                        for col, url in zip(cols, image_lst):
+                            col.image(url, use_column_width='auto')
+                    pre_query = cur_query
+                    image_lst = []
+                try:
+                    response = requests.get(item['imageUrl'], timeout=2)
+                    if response.status_code == 200:
+                        image_lst.append(Image.open(BytesIO(response.content)))
+                except:
+                    pass
+
+            if len(image_lst) > 0:
+                st.write(pre_query.replace(extra_query_str, ''))
+                max_images_per_row = MAX_QUERY_CT
+                num_cols = min(max_images_per_row, len(image_lst))
+
+                cols = st.columns(num_cols)
+                for col, url in zip(cols, image_lst):
+                    col.image(url, use_column_width='auto')
 
     st.stop()
