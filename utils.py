@@ -127,5 +127,5 @@ def display_images(suggestion, max_query_ct, image_lst):
     num_cols = min(max_images_per_row, len(image_lst))
 
     cols = st.columns(num_cols)
-    for col, url in zip(cols, image_byes_lst):
+    for col, url in zip(cols, image_lst):
         col.image(url, use_column_width='auto')
