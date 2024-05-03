@@ -1,5 +1,4 @@
 import streamlit as st
-import time
 import sys
 import requests
 from PIL import Image
@@ -16,7 +15,6 @@ st.set_page_config(page_title="local_suggestions")
 with st.sidebar:
     st.image('logo.png', width=200)
 
-TIMEOUT_SECONDS = 120  # Timeout after 120 sec
 MAX_QUERY_CT = 2
 
 if 'country' in st.session_state.keys() and st.session_state.country != '' and \
@@ -27,9 +25,6 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
     st.markdown(confirm_response, unsafe_allow_html=True)
 
     openai_client = OpenAI(api_key=st.secrets['OPENAI_API_KEY'])
-    apify_client = ApifyClient(st.secrets['APIFY_TOKEN'])
-
-    start_time = time.time()
 
     st.write('##')
     with st.spinner('🚀 Generating suggestions...'):
@@ -50,16 +45,15 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
                 st.write("🤔 Can't show anything on the map, does it exist on Earth?")
 
     if len(suggestion_lst) > 0:
-        query_lst = []
-        extra_query_str = f'{st.session_state.region} {st.session_state.country} in {st.session_state.month}'
-        for suggestion in suggestion_lst:
-            query_lst.append(f'{suggestion} {extra_query_str}')
-
         st.write('##')
         with st.spinner('🚀 Collecting local activities! Look 👇'):
-            elapsed_time = time.time() - start_time
-            if elapsed_time > TIMEOUT_SECONDS:
-                st.stop()  # stop when timeout
+            extra_query_str = f'in {st.session_state.month}'
+
+        try:  # run Apify first
+            apify_client = ApifyClient(st.secrets['APIFY_TOKEN'])
+            query_lst = []
+            for suggestion in suggestion_lst:
+                query_lst.append(f'{suggestion} {extra_query_str}')
 
             run_input = {
                 "queries": query_lst,
@@ -72,13 +66,7 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
                 cur_query = item['query']
                 if cur_query != pre_query:
                     if len(image_lst) > 0:
-                        st.write(pre_query.replace(extra_query_str, ''))
-                        max_images_per_row = MAX_QUERY_CT
-                        num_cols = min(max_images_per_row, len(image_lst))
-
-                        cols = st.columns(num_cols)
-                        for col, url in zip(cols, image_lst):
-                            col.image(url, use_column_width='auto')
+                        display_images(pre_query.replace(extra_query_str, ''), MAX_QUERY_CT, image_lst)
                     pre_query = cur_query
                     image_lst = []
                 try:
@@ -89,12 +77,22 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
                     pass
 
             if len(image_lst) > 0:
-                st.write(pre_query.replace(extra_query_str, ''))
-                max_images_per_row = MAX_QUERY_CT
-                num_cols = min(max_images_per_row, len(image_lst))
-
-                cols = st.columns(num_cols)
-                for col, url in zip(cols, image_lst):
-                    col.image(url, use_column_width='auto')
+                display_images(pre_query.replace(extra_query_str, ''), MAX_QUERY_CT, image_lst)
+        except:  # run GCS if Apify doesn't work
+            google_api_key = st.secrets['GOOGLE_API_KEY']
+            cx = st.secrets['GOOGLE_EX_ID']
+            for suggestion in suggestion_lst:
+                query = f'{suggestion}'
+                image_urls = search_images(query, google_api_key, cx, hq=extra_query_str)
+                image_lst = []
+                for image_url in image_urls:
+                    try:
+                        response = requests.get(image_url, timeout=2)
+                        if response.status_code == 200:
+                            image_lst.append(Image.open(BytesIO(response.content)))
+                    except:
+                        pass
+                if len(image_lst) > 0:
+                    display_images(suggestion, MAX_QUERY_CT, image_lst)
 
     st.stop()

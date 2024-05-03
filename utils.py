@@ -93,5 +93,39 @@ def get_map(geo_df):
     )
 
     r = pdk.Deck(layers=[icon_layer], initial_view_state=view_state, tooltip={"text": "{tags}"})
-
     return r
+
+
+def search_images(query, api_key, cx, hq):
+    url = f"https://www.googleapis.com/customsearch/v1"
+    params = {
+        "q": query,
+        "searchType": "image",
+        "key": api_key,
+        "cx": cx,
+        "num": 2,
+        "imgType": ["photo"],
+        "imgSize": ["huge", "xxlarge"],
+        "filter": 1,
+        "lr": "lang_en",
+        "imgColorType": "color",
+        "hq": hq
+
+    }
+    response = requests.get(url, params=params)
+    if response.status_code == 200:
+        data = response.json()
+        image_urls = [item["link"] for item in data.get("items", [])]
+        return image_urls
+    else:
+        return []
+
+
+def display_images(suggestion, max_query_ct, image_lst):
+    st.write(suggestion)
+    max_images_per_row = max_query_ct
+    num_cols = min(max_images_per_row, len(image_lst))
+
+    cols = st.columns(num_cols)
+    for col, url in zip(cols, image_byes_lst):
+        col.image(url, use_column_width='auto')
