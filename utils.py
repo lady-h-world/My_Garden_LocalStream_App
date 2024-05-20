@@ -8,7 +8,7 @@ import pydeck as pdk
 
 def get_llm_suggests(openai_client, country_input, month_input, region_input):
     completion = openai_client.chat.completions.create(
-      model="gpt-4-turbo",  # "gpt-3.5-turbo-0125",
+      model="gpt-3.5-turbo-0125",
       messages=[
         {"role": "user",
          "content": f"""
