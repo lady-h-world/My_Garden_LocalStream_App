@@ -59,6 +59,7 @@ def get_geo_json(location_lst, region, country):
                                    'tags': dest})
             except Exception as e:
                 st.write(e)  # TEST ONLY
+                st.write(url)  # TEST ONLY
 
     if len(output_lst) > 0:
         return pd.DataFrame(output_lst)
