@@ -41,26 +41,32 @@ def get_geo_json(location_lst, region, country):
     headers = {'User-Agent': st.secrets['PYDECK_UA']}
 
     output_lst = []
+    continents = ["asia", "europe", "africa", "north america", "south america", "australia", "antarctica"]
     for dest in location_lst:
         try:
             if 'and' in dest:
                 dest = dest.split(' and ')[0]
-            url = f"https://nominatim.openstreetmap.org/?addressdetails=1&q={dest}+{region}+{country}&format=json&limit=1"
+            if country.lower() in continents:
+                url = f"https://nominatim.openstreetmap.org/?addressdetails=1&q={dest}+{region}&format=json&limit=1"
+            else:
+                url = f"https://nominatim.openstreetmap.org/?addressdetails=1&q={dest}+{region}+{country}&format=json&limit=1"
             response = requests.get(url, headers=headers).json()
             output_lst.append({'lat': float(response[0]["lat"]),
                                'lon': float(response[0]["lon"]),
                                'tags': dest})
-        except:
-            try:
-                dest = dest.split()[0]
-                url = f"https://nominatim.openstreetmap.org/?addressdetails=1&q={dest}+{region}+{country}&format=json&limit=1"
-                response = requests.get(url, headers=headers).json()
-                output_lst.append({'lat': float(response[0]["lat"]),
-                                   'lon': float(response[0]["lon"]),
-                                   'tags': dest})
-            except Exception as e:
-                st.write(e)  # TEST ONLY
-                st.write(url)  # TEST ONLY
+        except Exception as e:
+            st.write(e)  # TEST ONLY
+            st.write(url)  # TEST ONLY
+            # try:
+            #     dest = dest.split()[0]
+            #     url = f"https://nominatim.openstreetmap.org/?addressdetails=1&q={dest}+{region}+{country}&format=json&limit=1"
+            #     response = requests.get(url, headers=headers).json()
+            #     output_lst.append({'lat': float(response[0]["lat"]),
+            #                        'lon': float(response[0]["lon"]),
+            #                        'tags': dest})
+            # except Exception as e:
+            #     st.write(e)  # TEST ONLY
+            #     st.write(url)  # TEST ONLY
 
     if len(output_lst) > 0:
         return pd.DataFrame(output_lst)
