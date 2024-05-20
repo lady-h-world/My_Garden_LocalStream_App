@@ -75,9 +75,9 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
                             image_lst.append(Image.open(BytesIO(response.content)))
                     except:
                         pass
-
                 if len(image_lst) > 0:
                     display_images(pre_query.replace(extra_query_str, ''), MAX_QUERY_CT, image_lst)
+                    
             except:  # run GCS if Apify doesn't work
                 google_api_key = st.secrets['GOOGLE_API_KEY']
                 cx = st.secrets['GOOGLE_EX_ID']
