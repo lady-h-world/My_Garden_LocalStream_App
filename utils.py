@@ -57,8 +57,8 @@ def get_geo_json(location_lst, region, country):
                 output_lst.append({'lat': float(response[0]["lat"]),
                                    'lon': float(response[0]["lon"]),
                                    'tags': dest})
-            except:
-                pass
+            except Exception as e:
+                st.write(e)  # TEST ONLY
 
     if len(output_lst) > 0:
         return pd.DataFrame(output_lst)
