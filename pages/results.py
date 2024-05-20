@@ -95,5 +95,4 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
                             pass
                     if len(image_lst) > 0:
                         display_images(suggestion, MAX_QUERY_CT, image_lst)
-
-    # st.stop()
+    st.stop()
