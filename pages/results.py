@@ -49,7 +49,7 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
         extra_query_str = f'in {st.session_state.month}'
 
         try:  # run Apify first
-            with st.spinner('🔮 Collecting local activities, searching for most relevant photos! ⏳'):
+            with st.spinner('🔮 Collecting local activities and most relevant photos! 1 minute... ⏳'):
                 apify_client = ApifyClient(st.secrets['APIFY_TOKEN'])
                 query_lst = []
                 for suggestion in suggestion_lst:
