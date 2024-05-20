@@ -18,6 +18,7 @@ def get_llm_suggests(openai_client, country_input, month_input, region_input):
       ]
     )
     output = completion.choices[0].message.content
+    st.write(output)  # TEST ONLY
 
     # get suggestions
     pattern = r'\d+\.\s+(.*)'
