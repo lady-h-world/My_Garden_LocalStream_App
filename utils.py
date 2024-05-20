@@ -30,7 +30,7 @@ def get_llm_suggests(openai_client, country_input, month_input, region_input):
     # get location list
     try:
         last_line = output.split('\n')[-1].replace('.', '').replace('-', '')
-        location_lst = re.split(r',|,\s*', last_line.split(': ')[-1])
+        location_lst = re.split(r',\s*|\s*,\s*', last_line.split(': ')[-1])
     except:
         location_lst = []
 
