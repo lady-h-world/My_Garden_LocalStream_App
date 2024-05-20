@@ -18,7 +18,6 @@ def get_llm_suggests(openai_client, country_input, month_input, region_input):
       ]
     )
     output = completion.choices[0].message.content
-    st.write(output)  # TEST ONLY
 
     # get suggestions
     pattern = r'\d+\.\s+(.*)'
@@ -41,15 +40,11 @@ def get_geo_json(location_lst, region, country):
     headers = {'User-Agent': st.secrets['PYDECK_UA']}
 
     output_lst = []
-    continents = ["asia", "europe", "africa", "north america", "south america", "australia", "antarctica"]
     for dest in location_lst:
         try:
             if 'and' in dest:
                 dest = dest.split(' and ')[0]
-            if country.lower() in continents:
-                url = f"https://nominatim.openstreetmap.org/?addressdetails=1&q={dest}+{region}&format=json&limit=1"
-            else:
-                url = f"https://nominatim.openstreetmap.org/?addressdetails=1&q={dest}+{region}+{country}&format=json&limit=1"
+            url = f"https://nominatim.openstreetmap.org/?addressdetails=1&q={dest}+{region}+{country}&format=json&limit=1"
             response = requests.get(url, headers=headers).json()
             output_lst.append({'lat': float(response[0]["lat"]),
                                'lon': float(response[0]["lon"]),

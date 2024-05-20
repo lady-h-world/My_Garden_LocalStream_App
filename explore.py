@@ -105,5 +105,3 @@ if country_input != '____' or region_input not in ['____', ''] or month_input !=
             st.markdown('#')
             if st.button('CONFIRM'):
                 switch_page('results')
-
-
