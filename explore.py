@@ -88,7 +88,7 @@ if country_input != '____' or region_input not in ['____', ''] or month_input !=
     st.markdown(confirm_response, unsafe_allow_html=True)
 
     col3, col4 = st.columns(2)
-    with col4:
+    with col3:
         st.markdown('#')
         if st.button('Clear Input'):
             if 'country' in st.session_state.keys():
@@ -101,7 +101,7 @@ if country_input != '____' or region_input not in ['____', ''] or month_input !=
 
     if (st.session_state.show_region == 'No' and country_input != '____' and month_input != '____') or \
        (st.session_state.show_region == 'Yes' and country_input != '____' and month_input != '____' and region_input not in ['____', '']):
-        with col3:
+        with col4:
             st.markdown('#')
             if st.button('CONFIRM'):
                 switch_page('results')
