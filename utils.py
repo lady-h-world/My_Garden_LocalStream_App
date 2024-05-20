@@ -8,7 +8,7 @@ import pydeck as pdk
 
 def get_llm_suggests(openai_client, country_input, month_input, region_input):
     completion = openai_client.chat.completions.create(
-      model="gpt-3.5-turbo-0613",  # "gpt-3.5-turbo-0125",
+      model="gpt-3.5-turbo-0125",
       messages=[
         {"role": "user",
          "content": f"""
@@ -54,19 +54,8 @@ def get_geo_json(location_lst, region, country):
             output_lst.append({'lat': float(response[0]["lat"]),
                                'lon': float(response[0]["lon"]),
                                'tags': dest})
-        except Exception as e:
-            st.write(e)  # TEST ONLY
-            st.write(url)  # TEST ONLY
-            # try:
-            #     dest = dest.split()[0]
-            #     url = f"https://nominatim.openstreetmap.org/?addressdetails=1&q={dest}+{region}+{country}&format=json&limit=1"
-            #     response = requests.get(url, headers=headers).json()
-            #     output_lst.append({'lat': float(response[0]["lat"]),
-            #                        'lon': float(response[0]["lon"]),
-            #                        'tags': dest})
-            # except Exception as e:
-            #     st.write(e)  # TEST ONLY
-            #     st.write(url)  # TEST ONLY
+        except:
+            pass
 
     if len(output_lst) > 0:
         return pd.DataFrame(output_lst)
