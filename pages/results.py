@@ -70,7 +70,7 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
                         pre_query = cur_query
                         image_lst = []
                     try:
-                        response = requests.get(item['imageUrl'], timeout=2)
+                        response = requests.get(item['imageUrl'], timeout=3)
                         if response.status_code == 200:
                             image_lst.append(Image.open(BytesIO(response.content)))
                     except:
