@@ -90,7 +90,7 @@ if country_input != '____' or region_input not in ['____', ''] or month_input !=
     col3, col4 = st.columns(2)
     with col4:
         st.markdown('#')
-        if st.button('Clear Messages'):
+        if st.button('Clear Input'):
             if 'country' in st.session_state.keys():
                 del st.session_state['country']
             if 'month' in st.session_state.keys():
