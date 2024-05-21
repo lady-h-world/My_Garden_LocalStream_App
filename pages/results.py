@@ -53,11 +53,12 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
                 query_lst = []
                 for suggestion in suggestion_lst:
                     query_lst.append(f'{suggestion} {extra_query_str}')
-                    run_input = {
-                        "queries": query_lst,
-                        "maxResultsPerQuery": MAX_QUERY_CT,
-                    }
-                    run = apify_client.actor("tnudF2IxzORPhg4r8").call(run_input=run_input)
+
+                run_input = {
+                    "queries": query_lst,
+                    "maxResultsPerQuery": MAX_QUERY_CT,
+                }
+                run = apify_client.actor("tnudF2IxzORPhg4r8").call(run_input=run_input)
             with st.spinner('🚀 Loading photos! Look 👇'):
                 pre_query = None
                 image_lst = []
