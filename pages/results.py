@@ -16,6 +16,7 @@ with st.sidebar:
     st.image('logo.png', width=200)
 
 MAX_QUERY_CT = 2
+APIFY_QUERY_LIMIT = 5
 
 if 'country' in st.session_state.keys() and st.session_state.country != '' and \
        'month' in st.session_state.keys() and st.session_state.month != '':
@@ -50,9 +51,10 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
         try:  # run Apify first
             with st.spinner('🔮 Collecting local activities and most relevant photos! 1 minute, literally... 😅'):
                 apify_client = ApifyClient(st.secrets['APIFY_TOKEN'])
-                query_lst = []
-                for suggestion in suggestion_lst:
-                    query_lst.append(f'{suggestion} {extra_query_str}')
+                # limit image search time
+                if len(suggestion_lst) > APIFY_QUERY_LIMIT:
+                    suggestion_lst = suggestion_lst[0:APIFY_QUERY_LIMIT]
+                query_lst = [f'{suggestion} {extra_query_str}' for suggestion in suggestion_lst]
 
                 run_input = {
                     "queries": query_lst,
