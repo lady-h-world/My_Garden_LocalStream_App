@@ -49,7 +49,7 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
         st.write('##')
         extra_query_str = f'in {st.session_state.month}'
         try:  # run Apify first
-            with st.spinner('🔮 Collecting local activities and most relevant photos! 1 minute, literally... 😅'):
+            with st.spinner('🔮 Collecting local activities and most relevant photos!'):
                 apify_client = ApifyClient(st.secrets['APIFY_TOKEN'])
                 # limit image search time
                 if len(suggestion_lst) > APIFY_QUERY_LIMIT:
