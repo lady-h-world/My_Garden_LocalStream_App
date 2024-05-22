@@ -16,7 +16,6 @@ with st.sidebar:
     st.image('logo.png', width=200)
 
 MAX_QUERY_CT = 2
-APIFY_QUERY_LIMIT = 5
 
 if 'country' in st.session_state.keys() and st.session_state.country != '' and \
        'month' in st.session_state.keys() and st.session_state.month != '':
@@ -38,23 +37,19 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
             st.stop()
 
     if len(location_lst) > 0:
-        st.write(location_lst)  # TEST ONLY
         with st.spinner('🚀 Loading suggestions on the map! Look 👇'):
             geo_df = get_geo_json(location_lst, st.session_state.region, st.session_state.country)
             if geo_df is not None:
                 st.pydeck_chart(get_map(geo_df))
             else:
-                st.write(location_lst)  # TEST ONLY
+                st.write("🤔 Can't show any location on map, check suggestions below 👇")
 
     if len(suggestion_lst) > 0:
         st.write('##')
         extra_query_str = f'in {st.session_state.month}'
-        try:  # run Apify first
+        try:  # run Apify
             with st.spinner('🔮 Collecting local activities and most relevant photos!'):
                 apify_client = ApifyClient(st.secrets['APIFY_TOKEN'])
-                # limit image search time
-                if len(suggestion_lst) > APIFY_QUERY_LIMIT:
-                    suggestion_lst = suggestion_lst[0:APIFY_QUERY_LIMIT]
                 query_lst = [f'{suggestion} {extra_query_str}' for suggestion in suggestion_lst]
 
                 run_input = {
@@ -80,7 +75,6 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
                         pass
                 if len(image_lst) > 0:
                     display_images(pre_query.replace(extra_query_str, ''), MAX_QUERY_CT, image_lst)
-
         except:  # run GCS if Apify doesn't work
             with st.spinner('🚀 Collecting local activities! Look 👇'):
                 google_api_key = st.secrets['GOOGLE_API_KEY']
