@@ -43,7 +43,7 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
             if geo_df is not None:
                 st.pydeck_chart(get_map(geo_df))
             else:
-                st.write("🤔 The locations might be too small to display on map. Check suggestions below!")
+                st.write(location_lst)  # TEST ONLY
 
     if len(suggestion_lst) > 0:
         st.write('##')
