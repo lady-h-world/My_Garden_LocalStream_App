@@ -13,7 +13,7 @@ def get_llm_suggests(openai_client, country_input, month_input, region_input):
         {"role": "user",
          "content": f"""
                         List best things to do in {region_input} {country_input} in {month_input},
-                        print out the suggested locations at the end in one line and separated in comma.
+                        print out the location names at the end in one line and separated in comma.
                     """}
       ]
     )
