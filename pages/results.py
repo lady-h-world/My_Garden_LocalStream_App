@@ -37,13 +37,14 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
             st.stop()
 
     if len(location_lst) > 0:
-        st.write(location_lst)  # TEST ONLY
         with st.spinner('🚀 Loading suggestions on the map! Look 👇'):
             geo_df = get_geo_json(location_lst, st.session_state.region, st.session_state.country)
             if geo_df is not None:
                 st.pydeck_chart(get_map(geo_df))
             else:
-                st.write("🤔 Can't show any location on map, check suggestions below 👇")
+                st.write('### Suggested Locations are:')
+                st.write(location_lst)
+                st.write("🤔 Can't show them on the map, check suggestions below 👇")
 
     if len(suggestion_lst) > 0:
         st.write('##')
