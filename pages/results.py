@@ -37,6 +37,7 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
             st.stop()
 
     if len(location_lst) > 0:
+        st.write(location_lst)  # TEST ONLY
         with st.spinner('🚀 Loading suggestions on the map! Look 👇'):
             geo_df = get_geo_json(location_lst, st.session_state.region, st.session_state.country)
             if geo_df is not None:
@@ -46,7 +47,7 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
 
     if len(suggestion_lst) > 0:
         st.write('##')
-        extra_query_str = f'in {st.session_state.month}'
+        extra_query_str = f'in {st.session_state.month} at {st.session_state.region}, {st.session_state.country}'
         try:  # run Apify
             with st.spinner('🔮 Collecting local activities and most relevant photos!'):
                 apify_client = ApifyClient(st.secrets['APIFY_TOKEN'])
