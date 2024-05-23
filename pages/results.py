@@ -21,7 +21,7 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
        'month' in st.session_state.keys() and st.session_state.month != '':
     if 'region' not in st.session_state.keys() or st.session_state.region in ['____', ''] or st.session_state.show_region=='No':
         st.session_state.region = ''
-    confirm_response = f"""### 🤩 You plan to travel to: <u>{st.session_state.region}</u> <u>{st.session_state.country}</u> in month <u>{st.session_state.month}</u>"""
+    confirm_response = f"""#### 🤩 You plan to go to: <u>{st.session_state.region}</u> <u>{st.session_state.country}</u> in <u>{st.session_state.month}</u>"""
     st.markdown(confirm_response, unsafe_allow_html=True)
 
     openai_client = OpenAI(api_key=st.secrets['OPENAI_API_KEY'])
