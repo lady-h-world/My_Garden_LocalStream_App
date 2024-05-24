@@ -59,6 +59,7 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
                     "maxResultsPerQuery": MAX_QUERY_CT,
                 }
                 run = apify_client.actor("tnudF2IxzORPhg4r8").call(run_input=run_input, timeout_secs=90)
+                st.write(run)  # TEST ONLY
             with st.spinner('🚀 Loading photos! Look 👇'):
                 pre_query = None
                 image_lst = []
@@ -77,7 +78,7 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
                         pass
                 if len(image_lst) > 0:
                     display_images(pre_query.replace(extra_query_str, ''), MAX_QUERY_CT, image_lst)
-        except Exception as e:  # run GCS if Apify doesn't work
+        except:  # run GCS if Apify doesn't work
             with st.spinner('🚀 Collecting local activities! Look 👇'):
                 google_api_key = st.secrets['GOOGLE_API_KEY']
                 cx = st.secrets['GOOGLE_EX_ID']
