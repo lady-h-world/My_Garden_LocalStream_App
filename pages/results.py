@@ -58,7 +58,7 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
                     "queries": query_lst,
                     "maxResultsPerQuery": MAX_QUERY_CT,
                 }
-                run = apify_client.actor("tnudF2IxzORPhg4r8").call(run_input=run_input, timeout_secs=90)
+                run = apify_client.actor("tnudF2IxzORPhg4r8").call(run_input=run_input, timeout_Secs=90)
             with st.spinner('🚀 Loading photos! Look 👇'):
                 pre_query = None
                 image_lst = []
