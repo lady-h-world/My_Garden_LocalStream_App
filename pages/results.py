@@ -50,16 +50,21 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
         st.write('##')
         extra_query_str = f'in {st.session_state.month} at {st.session_state.region}, {st.session_state.country}'
         try:  # run Apify
-            raise Exception('Apify run failed')  # when Apify is under maintenance
             with st.spinner('🔮 Collecting local activities and most relevant photos!'):
                 apify_client = ApifyClient(st.secrets['APIFY_TOKEN'])
                 query_lst = [f'{suggestion} {extra_query_str}' for suggestion in suggestion_lst]
 
                 run_input = {
-                    "queries": query_lst,
-                    "maxResultsPerQuery": MAX_QUERY_CT,
+                    "q": query_lst,
+                    "num": MAX_QUERY_CT,
                 }
-                run = apify_client.actor("tnudF2IxzORPhg4r8").call(run_input=run_input, timeout_secs=90)
+                run = apify_client.actor("A0mbiJG03dUk4EZ7S").call(run_input=run_input, timeout_secs=90)
+
+                # run_input = {
+                #     "queries": query_lst,
+                #     "maxResultsPerQuery": MAX_QUERY_CT,
+                # }
+                # run = apify_client.actor("tnudF2IxzORPhg4r8").call(run_input=run_input, timeout_secs=90)
                 if run['status'] != "SUCCEEDED" or run['usage']['DATASET_WRITES'] == 0:
                     raise Exception('Apify run failed')
             with st.spinner('🚀 Loading photos! Look 👇'):
@@ -81,7 +86,6 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
                 if len(image_lst) > 0:
                     display_images(pre_query.replace(extra_query_str, ''), MAX_QUERY_CT, image_lst)
         except:  # run GCS if Apify doesn't work
-            st.write('TEST')
             with st.spinner('🚀 Collecting local activities! Look 👇'):
                 google_api_key = st.secrets['GOOGLE_API_KEY']
                 cx = st.secrets['GOOGLE_EX_ID']
