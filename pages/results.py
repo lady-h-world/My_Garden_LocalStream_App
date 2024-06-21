@@ -48,8 +48,7 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
 
     if len(suggestion_lst) > 0:
         st.write('##')
-        extra_query_str = f'in {st.session_state.month} at {st.session_state.region}, {st.session_state.country}'
-        st.write(extra_query_str)
+        extra_query_str = f'in {st.session_state.month} at {st.session_state.region} {st.session_state.country}'
         try:  # run Apify
             with st.spinner('🔮 Collecting local activities and most relevant photos!'):
                 apify_client = ApifyClient(st.secrets['APIFY_TOKEN'])
@@ -60,6 +59,7 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
                     "num": MAX_QUERY_CT,
                 }
                 run = apify_client.actor("A0mbiJG03dUk4EZ7S").call(run_input=run_input, timeout_secs=90)
+                st.write(run)  # TEST
 
                 # run_input = {
                 #     "queries": query_lst,
