@@ -46,10 +46,10 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
                 st.write(location_lst)
                 st.write("🤔 Can't show them on the map, check suggestions below 👇")
 
-
     if len(suggestion_lst) > 0:
         st.write('##')
         extra_query_str = f'in {st.session_state.month} at {st.session_state.region}, {st.session_state.country}'
+        st.write(extra_query_str)
         try:  # run Apify
             with st.spinner('🔮 Collecting local activities and most relevant photos!'):
                 apify_client = ApifyClient(st.secrets['APIFY_TOKEN'])
