@@ -46,6 +46,7 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
                 st.write(location_lst)
                 st.write("🤔 Can't show them on the map, check suggestions below 👇")
 
+    st.write(len(suggestion_lst))  # TEST ONLY
     if len(suggestion_lst) > 0:
         st.write('##')
         extra_query_str = f'in {st.session_state.month} at {st.session_state.region}, {st.session_state.country}'
