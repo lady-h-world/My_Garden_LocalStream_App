@@ -55,13 +55,11 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
                 query_lst = [f'{suggestion} {extra_query_str}' for suggestion in suggestion_lst]
 
                 run_input = {
-                    "q": query_lst,
-                    "num": MAX_QUERY_CT,
-                    # "queries": query_lst,
-                    # "maxResultsPerQuery": MAX_QUERY_CT,
+                    "queries": query_lst,
+                    "maxResultsPerQuery": MAX_QUERY_CT,
                 }
-                run = apify_client.actor("A0mbiJG03dUk4EZ7S").call(run_input=run_input, timeout_secs=90)
-                # run = apify_client.actor("tnudF2IxzORPhg4r8").call(run_input=run_input, timeout_secs=90)
+                run = apify_client.actor("tnudF2IxzORPhg4r8").call(run_input=run_input, timeout_secs=90)
+                st.write(run)  # TEST ONLY
                 if run['status'] != "SUCCEEDED":
                     raise Exception('Apify run failed')
             with st.spinner('🚀 Loading photos! Look 👇'):
