@@ -101,7 +101,7 @@ def search_images(query, api_key, cx, hq):
         "filter": 1,
         "lr": "lang_en",
         "siteSearchFilter": "e",
-        "siteSearch": "https://c8.alamy.com",
+        "siteSearch": "https://www.alamy.com",
         "imgColorType": "color",
         "hq": hq
     }
