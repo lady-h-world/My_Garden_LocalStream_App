@@ -88,7 +88,7 @@ if 'country' in st.session_state.keys() and st.session_state.country != '' and \
                     query = f'{suggestion}'
                     image_urls = search_images(query, google_api_key, cx, hq=extra_query_str)
                     image_lst = []
-                    st.write(image_lst)  # TEST ONLY
+                    st.write(image_urls)  # TEST ONLY
                     for image_url in image_urls:
                         try:
                             response = requests.get(image_url, timeout=3)
